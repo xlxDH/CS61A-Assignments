@@ -253,6 +253,14 @@ def make_averaged(original_function, times_called=1000):
     3.0
     """
     # BEGIN PROBLEM 8
+
+    def aver(*args):
+        cnt = 0
+        for i in range(times_called):
+            cnt += original_function(*args)
+        return cnt / times_called
+    return aver
+
     "*** YOUR CODE HERE ***"
     # END PROBLEM 8
 
@@ -266,6 +274,18 @@ def max_scoring_num_rolls(dice=six_sided, times_called=1000):
     1
     """
     # BEGIN PROBLEM 9
+
+    mn , idx , i = 0 , 1 , 1
+    while i <= 10:
+        aver = make_averaged(roll_dice,times_called)
+        t = aver(i,dice)
+        if t>mn:
+            mn = t
+            idx = i
+        i = i + 1
+    return idx
+
+
     "*** YOUR CODE HERE ***"
     # END PROBLEM 9
 
@@ -311,6 +331,10 @@ def boar_strategy(score, opponent_score, threshold=11, num_rolls=6):
     points, and returns NUM_ROLLS otherwise. Ignore score and Sus Fuss.
     """
     # BEGIN PROBLEM 10
+
+    t = boar_brawl(score,opponent_score)
+    if t>=threshold:
+        num_rolls = 0
     return num_rolls  # Remove this line once implemented.
     # END PROBLEM 10
 
@@ -318,6 +342,11 @@ def boar_strategy(score, opponent_score, threshold=11, num_rolls=6):
 def sus_strategy(score, opponent_score, threshold=11, num_rolls=6):
     """This strategy returns 0 dice when your score would increase by at least threshold."""
     # BEGIN PROBLEM 11
+
+    t = boar_brawl(score,opponent_score)
+    ts = sus_points(score+t)
+    if ts - score >= threshold:
+        num_rolls = 0        
     return num_rolls  # Remove this line once implemented.
     # END PROBLEM 11
 
@@ -328,7 +357,10 @@ def final_strategy(score, opponent_score):
     *** YOUR DESCRIPTION HERE ***
     """
     # BEGIN PROBLEM 12
-    return 6  # Remove this line once implemented.
+    if score>80 and score - opponent_score > 20:
+        return 0
+    else: 
+        return 6
     # END PROBLEM 12
 
 
