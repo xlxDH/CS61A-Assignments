@@ -24,6 +24,14 @@ def num_eights(n):
     ...       ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'For', 'While'])
     True
     """
+
+    if n > 0:
+        if n%10 == 8:
+            return 1 + num_eights(n//10)
+        else:
+            return num_eights(n//10)
+    return  0
+
     "*** YOUR CODE HERE ***"
 
 
@@ -46,6 +54,13 @@ def digit_distance(n):
     ...       ['For', 'While'])
     True
     """
+
+    if n < 10:
+        return 0
+    else:
+        t , p = n%10 , n//10
+        return abs(t-p%10) + digit_distance(p)
+
     "*** YOUR CODE HERE ***"
 
 
@@ -70,6 +85,15 @@ def interleaved_sum(n, odd_func, even_func):
     >>> check(HW_SOURCE_FILE, 'interleaved_sum', ['BitAnd', 'BitOr', 'BitXor']) # ban bitwise operators, don't worry about these if you don't know what they are
     True
     """
+
+    def input(k,odd_func,even_fund):
+        if k>n:
+            return 0
+        else:
+            return odd_func(k) + input(k+1,even_fund,odd_func)
+
+    return input(1,odd_func,even_func)        
+
     "*** YOUR CODE HERE ***"
 
 
@@ -77,14 +101,15 @@ def next_smaller_dollar(bill):
     """Returns the next smaller bill in order."""
     if bill == 100:
         return 50
-    if bill == 50:
+    elif bill == 50:
         return 20
-    if bill == 20:
+    elif bill == 20:
         return 10
     elif bill == 10:
         return 5
     elif bill == 5:
         return 1
+    return None
 
 def count_dollars(total):
     """Return the number of ways to make change.
@@ -106,6 +131,20 @@ def count_dollars(total):
     >>> check(HW_SOURCE_FILE, 'count_dollars', ['While', 'For'])
     True
     """
+
+    def input(k,now):
+        if k == 0:
+            return 1
+        if k < 0: 
+            return 0
+        if now == None: 
+            return 0
+        t = input(k,next_smaller_dollar(now))
+        p = input(k-now,now)
+        return t+p
+    return input(total,100)        
+
+
     "*** YOUR CODE HERE ***"
 
 
@@ -142,6 +181,14 @@ def count_dollars_upward(total):
     >>> check(HW_SOURCE_FILE, 'count_dollars_upward', ['While', 'For'])
     True
     """
+    def input(k,now):
+        if k==0: return 1
+        if k<0: return 0
+        if now==None: return 0
+        t = input(k,next_larger_dollar(now))
+        p = input(k-now,now)
+        return t+p
+    return input(total,1)
     "*** YOUR CODE HERE ***"
 
 
@@ -177,6 +224,16 @@ def move_stack(n, start, end):
     Move the top disk from rod 1 to rod 3
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
+
+    if n == 1:
+        print_move(start,end)
+        return
+    elif n>1:
+        mid = 1+2+3 - start - end
+        move_stack(n-1,start,mid)
+        move_stack(1,start,end)
+        move_stack(n-1,mid,end)
+
     "*** YOUR CODE HERE ***"
 
 
@@ -193,5 +250,5 @@ def make_anonymous_factorial():
     ...     ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    return (lambda f:lambda x:f(f,x))(lambda f,k:k if k==1 else mul(k,f(f,sub(k,1))))
 
